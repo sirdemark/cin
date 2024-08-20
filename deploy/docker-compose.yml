@@ -1,0 +1,30 @@
+version: '3.9'
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: ./deploy/Dockerfile
+      target: prod
+    image: cin:${CIN_VERSION:-latest}
+    restart: always
+    env_file:
+    - .env
+    depends_on:
+      redis:
+        condition: service_healthy
+    environment:
+      CIN_HOST: 0.0.0.0
+      CIN_REDIS_HOST: cin-redis
+
+  redis:
+    image: bitnami/redis:6.2.5
+    hostname: "cin-redis"
+    restart: always
+    environment:
+      ALLOW_EMPTY_PASSWORD: "yes"
+    healthcheck:
+      test: redis-cli ping
+      interval: 1s
+      timeout: 3s
+      retries: 50
