@@ -1,6 +1,6 @@
 import requests
 import random
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
@@ -38,7 +38,7 @@ async def search(
         )
     except requests.ReadTimeout:
         print("Таймаут поиска")
-        return JSONResponse()
+        raise HTTPException(status_code=521, detail="search down")
 
     rutube_uuids = []
     if search_response == 200:
@@ -58,7 +58,7 @@ async def search(
         )
     except requests.ReadTimeout:
         print("Таймаут обогащения")
-        return JSONResponse()
+        raise HTTPException(status_code=521, detail="data down")
     
     return JSONResponse(content=jsonable_encoder(rutube_response.json()))
 
