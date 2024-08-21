@@ -22,16 +22,16 @@ class SearchQuery(BaseModel):
 async def search(
     query: SearchQuery,
 ) -> JSONResponse:
-    print(f"Запрос {query}")
+    print(f"Запрос {query.query}")
     try:
         search_response = requests.post(
             url = search_url,
             headers={
                 'Authorization': f'Bearer {token}',
             },
-            data = {
+            json={
 
-                    "query": query,
+                    "query": query.query,
                     "limit": 5,
                     "scenario": "search.rutube.cinema.online.video.fulltext",
             },
@@ -42,10 +42,11 @@ async def search(
         raise HTTPException(status_code=521, detail="search down")
 
     rutube_uuids = []
-    if search_response == 200:
-        payload = search_response.content['payload']
+    if search_response.status_code == 200:
+        payload = search_response.json()['payload']
         for item in payload:
             rutube_uuids.append(item['content_id'])
+    
 
     try:
         rutube_response = requests.get(
