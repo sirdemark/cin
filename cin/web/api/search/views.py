@@ -22,6 +22,7 @@ class SearchQuery(BaseModel):
 async def search(
     query: SearchQuery,
 ) -> JSONResponse:
+    print(f"Запрос {query}")
     try:
         search_response = requests.post(
             url = search_url,
