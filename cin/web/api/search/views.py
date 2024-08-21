@@ -22,31 +22,45 @@ class SearchQuery(BaseModel):
 async def search(
     query: SearchQuery,
 ) -> JSONResponse:
-    search_response = requests.post(
-        url = search_url,
-        headers={
-            'Authorization': f'Bearer {token}',
-        },
-        data = {
+    try:
+        search_response = requests.post(
+            url = search_url,
+            headers={
+                'Authorization': f'Bearer {token}',
+            },
+            data = {
 
-                "query": query,
-                "limit": 5,
-                "scenario": "search.rutube.cinema.online.video.fulltext",
-        },
-    )
+                    "query": query,
+                    "limit": 5,
+                    "scenario": "search.rutube.cinema.online.video.fulltext",
+            },
+            timeout=5,
+        )
+    except requests.ReadTimeout:
+        print("Таймаут поиска")
+        return JSONResponse()
+
     rutube_uuids = []
     if search_response == 200:
         payload = search_response.content['payload']
         for item in payload:
             rutube_uuids.append(item['content_id'])
 
-    rutube_response = requests.get(
-        url=rutube_url,
-        params={
-            'id_list': ','.join(rutube_uuids),
-        },
-    )
-    return JSONResponse(content=jsonable_encoder(rutube_response.content))
+    try:
+        rutube_response = requests.get(
+            url=rutube_url,
+            params={
+                'id_list': ','.join(rutube_uuids),
+            },
+            headers={
+                "Content-Type": "application/json"
+            }
+        )
+    except requests.ReadTimeout:
+        print("Таймаут обогащения")
+        return JSONResponse()
+    
+    return JSONResponse(content=jsonable_encoder(rutube_response.json()))
 
 
 @router.get("/feed")
