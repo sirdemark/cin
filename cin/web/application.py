@@ -2,6 +2,7 @@ from importlib import metadata
 
 from fastapi import FastAPI
 from fastapi.responses import UJSONResponse
+from fastapi.middleware.cors import CORSMiddleware
 
 from cin.web.api.router import api_router
 from cin.web.lifetime import register_shutdown_event, register_startup_event
@@ -15,6 +16,7 @@ def get_app() -> FastAPI:
 
     :return: application.
     """
+
     app = FastAPI(
         title="cin",
         version=metadata.version("cin"),
@@ -23,6 +25,13 @@ def get_app() -> FastAPI:
         openapi_url="/api/openapi.json",
         default_response_class=UJSONResponse,
     )
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=['*'],
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],    
+    )   
 
     # Adds startup and shutdown events.
     register_startup_event(app)
