@@ -74,7 +74,9 @@ async def search(
 async def search(
     request: Request,
 ) -> JSONResponse:
+    print(request.headers)
     host = request.headers['host']
+    print(host)
     number_of_items = 5
     if len(FEED_ITEMS) < number_of_items:
         number_of_items = len(FEED_ITEMS)
