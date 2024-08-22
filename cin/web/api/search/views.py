@@ -23,7 +23,7 @@ async def search(
     request: Request,
     query: SearchQuery,
 ) -> JSONResponse:
-    host = request.headers['host']
+    host = request.headers['referer']
     print(f"Запрос {query.query}")
     try:
         search_response = requests.post(
@@ -75,7 +75,7 @@ async def search(
     request: Request,
 ) -> JSONResponse:
     print(request.headers)
-    host = request.headers['host']
+    host = request.headers['referer']
     print(host)
     number_of_items = 5
     if len(FEED_ITEMS) < number_of_items:
