@@ -1,6 +1,6 @@
 import requests
 import random
-from fastapi import APIRouter, HTTPException, Request
+from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
@@ -20,7 +20,6 @@ class SearchQuery(BaseModel):
 
 @router.post("/search")
 async def search(
-    request: Request,
     query: SearchQuery,
 ) -> JSONResponse:
     print(f"Запрос {query.query}")
@@ -70,10 +69,8 @@ async def search(
 
 
 @router.get("/feed")
-async def search(
-    request: Request,
-) -> JSONResponse:
-    number_of_items = 5
+async def search() -> JSONResponse:
+    number_of_items = 15
     if len(FEED_ITEMS) < number_of_items:
         number_of_items = len(FEED_ITEMS)
 
