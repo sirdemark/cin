@@ -28,8 +28,8 @@ def get_app() -> FastAPI:
     app.add_middleware(
         CORSMiddleware,
         allow_origins=[
-            "localhost",
-            "127.0.0.1",
+            "http://localhost:8000",
+            "http://127.0.0.1",
             "https://cinemasearch.online",
             "http://cinemasearch.online",
         ],
