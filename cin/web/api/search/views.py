@@ -63,14 +63,14 @@ async def search(
         raise HTTPException(status_code=521, detail="data down")
     
     headers = {
-        'Access-Control-Allow-Origin': '*'
+        'Access-Control-Allow-Origin': 'https://cinemasearch.online'
     }
     return JSONResponse(headers=headers,content=jsonable_encoder(rutube_response.json()))
 
 
 @router.get("/feed")
 async def search() -> JSONResponse:
-    number_of_items = 50
+    number_of_items = 15
     if len(FEED_ITEMS) < number_of_items:
         number_of_items = len(FEED_ITEMS)
 
