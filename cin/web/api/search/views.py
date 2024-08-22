@@ -83,6 +83,6 @@ async def search(
 
     list_of_random_items = random.sample(FEED_ITEMS, number_of_items)
     headers = {
-        'Access-Control-Allow-Origin': host
+        'Access-Control-Allow-Origin': 'https://cinemasearch.online'
     }
     return JSONResponse(headers=headers, content=jsonable_encoder(list_of_random_items))
