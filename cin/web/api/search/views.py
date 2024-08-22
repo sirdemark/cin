@@ -70,7 +70,7 @@ async def search(
 
 @router.get("/feed")
 async def search() -> JSONResponse:
-    number_of_items = 15
+    number_of_items = 5
     if len(FEED_ITEMS) < number_of_items:
         number_of_items = len(FEED_ITEMS)
 
