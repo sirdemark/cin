@@ -23,7 +23,7 @@ async def search(
     request: Request,
     query: SearchQuery,
 ) -> JSONResponse:
-    host = request.headers['referer']
+    host = request.headers['origin']
     print(f"Запрос {query.query}")
     try:
         search_response = requests.post(
@@ -75,7 +75,7 @@ async def search(
     request: Request,
 ) -> JSONResponse:
     print(request.headers)
-    host = request.headers['referer']
+    host = request.headers['origin']
     print(host)
     number_of_items = 5
     if len(FEED_ITEMS) < number_of_items:
@@ -83,6 +83,6 @@ async def search(
 
     list_of_random_items = random.sample(FEED_ITEMS, number_of_items)
     headers = {
-        'Access-Control-Allow-Origin': host
+        'Access-Control-Allow-Origin': host or 'https://cinemasearhc'
     }
     return JSONResponse(headers=headers, content=jsonable_encoder(list_of_random_items))
