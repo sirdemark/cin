@@ -62,14 +62,20 @@ async def search(
         print("Таймаут обогащения")
         raise HTTPException(status_code=521, detail="data down")
     
-    return JSONResponse(content=jsonable_encoder(rutube_response.json()))
+    headers = {
+        'Access-Control-Allow-Origin': '*'
+    }
+    return JSONResponse(headers=headers,content=jsonable_encoder(rutube_response.json()))
 
 
 @router.get("/feed")
 async def search() -> JSONResponse:
-    number_of_items = 5
+    number_of_items = 50
     if len(FEED_ITEMS) < number_of_items:
         number_of_items = len(FEED_ITEMS)
 
     list_of_random_items = random.sample(FEED_ITEMS, number_of_items)
-    return JSONResponse(content=jsonable_encoder(list_of_random_items))
+    headers = {
+        'Access-Control-Allow-Origin': '*'
+    }
+    return JSONResponse(headers=headers, content=jsonable_encoder(list_of_random_items))
