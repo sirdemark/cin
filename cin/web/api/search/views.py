@@ -1,6 +1,6 @@
 import requests
 import random
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Request
 from pydantic import BaseModel
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
@@ -20,8 +20,10 @@ class SearchQuery(BaseModel):
 
 @router.post("/search")
 async def search(
+    request: Request,
     query: SearchQuery,
 ) -> JSONResponse:
+    host = print(request.headers['host'])
     print(f"Запрос {query.query}")
     try:
         search_response = requests.post(
@@ -63,19 +65,22 @@ async def search(
         raise HTTPException(status_code=521, detail="data down")
     
     headers = {
-        'Access-Control-Allow-Origin': 'https://cinemasearch.online'
+        'Access-Control-Allow-Origin': host
     }
     return JSONResponse(headers=headers,content=jsonable_encoder(rutube_response.json()))
 
 
 @router.get("/feed")
-async def search() -> JSONResponse:
+async def search(
+    request: Request,
+) -> JSONResponse:
+    host = print(request.headers['host'])
     number_of_items = 5
     if len(FEED_ITEMS) < number_of_items:
         number_of_items = len(FEED_ITEMS)
 
     list_of_random_items = random.sample(FEED_ITEMS, number_of_items)
     headers = {
-        'Access-Control-Allow-Origin': 'https://cinemasearch.online'
+        'Access-Control-Allow-Origin': host
     }
     return JSONResponse(headers=headers, content=jsonable_encoder(list_of_random_items))
