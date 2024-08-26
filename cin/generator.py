@@ -7,7 +7,7 @@ rutube_base = 'https://rutube.ru/play/embed/'
 
 def generate_yappy_link_and_thumbnail(yappy_uuid):
     yappy_uuid = uuid.UUID(yappy_uuid).hex
-    link = f'{yappy_link_base}{yappy_uuid[0:2]}/{yappy_uuid[2:4]}/{yappy_uuid[4:]}/hd.mp4'
+    link = f'{yappy_link_base}{yappy_uuid[0:2]}/{yappy_uuid[2:4]}/{yappy_uuid[4:]}/sd.mp4'
     thumbnail = f'{yappy_thumbnail_base}{yappy_uuid}.jpeg'
     return link, thumbnail
 
@@ -21,8 +21,8 @@ with open('films.csv') as ff:
         feedf.write('FEED_ITEMS = [\n')
         for row in csv.DictReader(ff, delimiter=';'):
             yappy_uuid = row['UUID']
-            description = row['Описание']
-            rutube_link = row['Ссылка рутуб']
+            description = row['Описание'].replace('"', '')
+            rutube_link = row['Ссылки рутуб']
             if not rutube_link:
                 continue
             feedf.write('\t{\n')
