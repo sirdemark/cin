@@ -32,7 +32,7 @@ async def search(
             json={
 
                     "query": query.query,
-                    "limit": 5,
+                    "limit": 2,
                     "scenario": "search.rutube.cinema.online.video.fulltext",
             },
             timeout=5,
